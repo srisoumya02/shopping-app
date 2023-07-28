@@ -11,7 +11,7 @@ import { selectCartItems, selectProductData } from "../Redux/selectors/cartSelec
 
 const ProductOrderSummary = () => {
   const { id } = useParams();
-  
+
   // const cartItems = useSelector(selectCartItems);
   // const [product, setProduct] = useSelector(selectProductData);
   const [product, setProduct] = useState({})

@@ -1,11 +1,11 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart } from "@fortawesome/free-solid-svg-icons";
-import React,{useEffect} from "react";
+import React, { useEffect } from "react";
 import "../index.css";
 import { Link, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { selectWishlistItemsCount } from '../Redux/selectors/wishlistSelectors';
-import { selectCartNumber,selectCartItems } from '../Redux/selectors/cartSelectors';
+import { selectCartNumber, selectCartItems } from '../Redux/selectors/cartSelectors';
 import { fetchProductDataForCartItems } from '../Redux/actions/cart-actions';
 const Navbar = () => {
     const wishlistItemsCount = useSelector(selectWishlistItemsCount);
@@ -14,7 +14,7 @@ const Navbar = () => {
     const dispatch = useDispatch();
     useEffect(() => {
         dispatch(fetchProductDataForCartItems(cartItems));
-      }, [cartItems, dispatch]);
+    }, [cartItems, dispatch]);
 
     return (
         <>
