@@ -12,7 +12,6 @@ const ProductCategoryList=()=>{
     const getData = () => {
         axios.get(Endpoints.PRODUCTS_URL)
         .then((response) => {
-            console.log(response.data);
             setProducts(response.data);
         })
             .catch(error => console.log(error))

@@ -25,7 +25,7 @@ const ProductsFiltered = () => {
         setFilteredProducts(response.data);
       })
       .catch((error) => console.log(error));
-  }, [category,id]);
+  }, [category]);
 
   const handleWishlistClick = (productId, isWishlisted) => {
     if (isWishlisted) {
@@ -37,7 +37,7 @@ const ProductsFiltered = () => {
 
   const dispatch=useDispatch()
   const addToCartHandler=()=>{
-    dispatch(addToCart(filteredProducts))
+    dispatch(addToCart(filteredProducts.id))
 }
 
 
@@ -84,7 +84,7 @@ const ProductsFiltered = () => {
               to={'/products/'+product.id} 
               className="btn btn-primary"
               style={{width:"250px",height:"40px"}}
-              onClick={addToCartHandler}
+             onClick={addToCartHandler}
               ><i className="fas fa-shopping-cart"></i>
               Add To Cart
               </Link> 
