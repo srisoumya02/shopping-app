@@ -1,17 +1,21 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart } from "@fortawesome/free-solid-svg-icons";
-import React from "react";
+import React,{useEffect} from "react";
 import "../index.css";
-import { Link } from "react-router-dom";
-import { useSelector } from "react-redux/es/hooks/useSelector";
+import { Link, useParams } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 import { selectWishlistItemsCount } from '../Redux/selectors/wishlistSelectors';
-// import { CartContext } from "../Redux/reducers/CartContext";
-
+import { selectCartNumber,selectCartItems } from '../Redux/selectors/cartSelectors';
+import { fetchProductDataForCartItems } from '../Redux/actions/cart-actions';
 const Navbar = () => {
-const wishlistItemsCount = useSelector(selectWishlistItemsCount);
+    const wishlistItemsCount = useSelector(selectWishlistItemsCount);
+    const numberCart = useSelector(selectCartNumber);
+    const cartItems = useSelector(selectCartItems);
+    const dispatch = useDispatch();
+    useEffect(() => {
+        dispatch(fetchProductDataForCartItems(cartItems));
+      }, [cartItems, dispatch]);
 
-//   const { cartState } = useContext(CartContext); // Get the cartState from context
-//   const cartCount = cartState.cartItems.length;
     return (
         <>
             <nav className="navbar navbar-expand-lg ">
@@ -49,25 +53,25 @@ const wishlistItemsCount = useSelector(selectWishlistItemsCount);
                         </li>
                         <li className="nav-item">
                             <Link to="/wishlist">
-                            <FontAwesomeIcon  icon={faHeart} style={{ marginTop: "12px" ,color: wishlistItemsCount > 0 ? "pink" : "grey" }} 
-                           
-                            />
-                            {wishlistItemsCount > 0 && (
-                                <span className="wishlist-added">{wishlistItemsCount}</span>
-                            )}
+                                <FontAwesomeIcon icon={faHeart} style={{ marginTop: "12px", color: wishlistItemsCount > 0 ? "pink" : "grey" }}
+
+                                />
+                                {wishlistItemsCount > 0 && (
+                                    <span className="wishlist-added">{wishlistItemsCount}</span>
+                                )}
                             </Link>
-                            
+
                         </li>
                         <li className="nav-item">
                             <Link className="nav-link" to="/products/:id">
-                                <i className="fas fa-shopping-cart"></i> Cart
-                                {/* {cartCount > 0 && (
-                <span className="badge badge-primary badge-circle cart-lookup">
-                  {cartCount}
-                </span>
-              )} */}
+                                <i className="fas fa-shopping-cart"></i>
+                                {numberCart > 0 ? (
+                                    <span className="badge  cart-lookup">
+                                        {numberCart}
+                                    </span>
+                                ) : null}
                             </Link>
-                            
+
                         </li>
                     </ul>
 

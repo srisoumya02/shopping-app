@@ -10,7 +10,9 @@ import { addToWishlist, removeFromWishlist } from '../Redux/actions/wishlist-act
 
 
 const Product = (props) => {
+  
     const { id, image, title, rating, price } =props.data;
+   
     
   const handleWishlistClick = (productId, isWishlisted) => {
     if (isWishlisted) {
@@ -59,10 +61,10 @@ const Product = (props) => {
               </h2>
               
               <Link 
-              // to={'/products/'+id} 
+               to={'/products/'+id} 
               className="btn btn-primary" 
               style={{width:"250px",height:"40px"}}
-              onClick={addToCartHandler}
+               onClick={addToCartHandler}
               >
                 <i className="fas fa-shopping-cart"></i>
               Add To Cart
