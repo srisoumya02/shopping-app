@@ -81,7 +81,7 @@ const ProductsFiltered = () => {
               </h2>
               
               <Link 
-              // to={'/products/'+product.id} 
+              to={'/products/'+product.id} 
               className="btn btn-primary"
               style={{width:"250px",height:"40px"}}
               onClick={addToCartHandler}
