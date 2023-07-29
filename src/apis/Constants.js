@@ -1,7 +1,7 @@
-const Constants={
-    BASE_URL:'https://fakestoreapi.com/',
-    
-  
-  }
-  
-  export default Constants
+const Constants = {
+  BASE_URL: 'https://fakestoreapi.com/',
+
+
+}
+
+export default Constants

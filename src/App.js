@@ -16,18 +16,18 @@ import Wishlist from "./pages/WishList";
 const App = () => {
   return (
     <Router>
-     
-          <Routes>
-            <Route path="/products/:id" element={<ProductOrderSummary />} />
-            <Route path="/products/category/:category" element={<ProductsFiltered />} /> 
-           <Route path="/products/categories" element={<HeaderCategory />} />
-            <Route path="/" element={<HomePage />} />
-            <Route path="/signup" element={<SignUPPage />} />
-            <Route path="/login" element={<LoginPage />} />
-            <Route path="*" element={<ErrorPage />} />
-            <Route path="/wishlist" element={<Wishlist />} />
-          </Routes>
-    
+
+      <Routes>
+        <Route path="/products/:id" element={<ProductOrderSummary />} />
+        <Route path="/products/category/:category" element={<ProductsFiltered />} />
+        <Route path="/products/categories" element={<HeaderCategory />} />
+        <Route path="/" element={<HomePage />} />
+        <Route path="/signup" element={<SignUPPage />} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="*" element={<ErrorPage />} />
+        <Route path="/wishlist" element={<Wishlist />} />
+      </Routes>
+
     </Router>
   );
 };

@@ -17,35 +17,58 @@ const LoginPage = () => {
     })
 
     const initialValues = {
-        email: '',
+        userName: '',
         password: ''
     }
     const navigate = useNavigate();
-    const onSubmit = (values) => {
-        // console.log(values)
-        axios.post(Endpoints.LOGIN_URL, values)
-            .then((response) => {
-                const token = response.data.token; // Assuming the API response contains a 'token' property
-                localStorage.setItem('token', token);
-                console.log(response.data);
-                setRequestResponse({
-                    textMesssage: "Login Sucessfull",
-                    alertClass: 'alert alert-success'
-                });
-                navigate("/");
-            },
-                (error) => {
-                    console.log(error);
-                    setRequestResponse({
-                        textMesssage: "Login not sucessfull",
-                        alertClass: 'alert alert-danger'
-                    })
-                })
-            .catch((error) => { console.log(error) })
 
+    const onSubmit = (values) => {
+        console.log(values)
+        const val = JSON.stringify({ values })
+        console.log(val)
+        const config = {
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        };
+
+        axios
+            .post(Endpoints.LOGIN_URL, val, config)
+
+            .then((response) => {
+
+                try {
+                    const responseData = JSON.parse(response.data.data);
+                    console.log(responseData)
+                    const token = responseData.token; // Assuming the API response contains a 'token' property
+                    localStorage.setItem('token', token);
+                    console.log(responseData);
+                    setRequestResponse({
+                        textMesssage: "Login Successful",
+                        alertClass: 'alert alert-success'
+                    });
+                    navigate("/");
+                } catch (error) {
+                    // Response data is not in valid JSON format
+                    console.log("Response data is not in valid JSON format:", response.data);
+                    setRequestResponse({
+                        textMesssage: "Login not successful",
+                        alertClass: 'alert alert-danger'
+                    });
+                }
+            })
+            .catch((error) => {
+                console.log(error);
+                setRequestResponse({
+                    textMesssage: "Login not successful",
+                    alertClass: 'alert alert-danger'
+                });
+            });
     }
+
+
     const validationSchema = Yup.object({
-        email: Yup.string().required('email is required').email('email must be a valid email'),
+        userName: Yup.string().required('user Name is required'),
         password: Yup.string().required('password is required').min(6, 'password must be atleast 6 characters')
     })
     return (
@@ -76,12 +99,12 @@ const LoginPage = () => {
                                                 <div className="form-group">
                                                     <Field
                                                         type="text"
-                                                        name="email"
-                                                        placeholder="Email Address"
-                                                        id="email"
-                                                        className={formik.touched.email && formik.errors.email ? "form-control is-invalid" : "form-control"}
+                                                        name="userName"
+                                                        placeholder="User Name"
+                                                        id="userName"
+                                                        className={formik.touched.userName && formik.errors.userName ? "form-control is-invalid" : "form-control"}
                                                     />
-                                                    <ErrorMessage name="email">
+                                                    <ErrorMessage name="userName">
                                                         {(ErrorMessage) => (
                                                             <small className="text-danger">{ErrorMessage}</small>
                                                         )}
@@ -105,7 +128,7 @@ const LoginPage = () => {
                                                 </div>
 
                                                 <button className="btn-primary btn-block" >
-                                                    <i class="fas fa-sign-in-alt"></i> Login
+                                                    <i className="fas fa-sign-in-alt"></i> Login
                                                 </button>
 
                                             </Form>
