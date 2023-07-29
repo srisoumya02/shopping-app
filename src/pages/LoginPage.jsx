@@ -17,14 +17,14 @@ const LoginPage = () => {
     })
 
     const initialValues = {
-        userName: '',
+        username: '',
         password: ''
     }
     const navigate = useNavigate();
 
     const onSubmit = (values) => {
         console.log(values)
-        const val = JSON.stringify({ values })
+        const val = JSON.stringify( values )
         console.log(val)
         const config = {
             headers: {
@@ -38,11 +38,11 @@ const LoginPage = () => {
             .then((response) => {
 
                 try {
-                    const responseData = JSON.parse(response.data.data);
-                    console.log(responseData)
-                    const token = responseData.token; // Assuming the API response contains a 'token' property
+                    
+                    const token = response.token;
+                    console.log(token) // Assuming the API response contains a 'token' property
                     localStorage.setItem('token', token);
-                    console.log(responseData);
+                  
                     setRequestResponse({
                         textMesssage: "Login Successful",
                         alertClass: 'alert alert-success'
@@ -68,7 +68,7 @@ const LoginPage = () => {
 
 
     const validationSchema = Yup.object({
-        userName: Yup.string().required('user Name is required'),
+        username: Yup.string().required('user Name is required'),
         password: Yup.string().required('password is required').min(6, 'password must be atleast 6 characters')
     })
     return (
@@ -99,10 +99,10 @@ const LoginPage = () => {
                                                 <div className="form-group">
                                                     <Field
                                                         type="text"
-                                                        name="userName"
+                                                        name="username"
                                                         placeholder="User Name"
                                                         id="userName"
-                                                        className={formik.touched.userName && formik.errors.userName ? "form-control is-invalid" : "form-control"}
+                                                        className={formik.touched.username && formik.errors.username ? "form-control is-invalid" : "form-control"}
                                                     />
                                                     <ErrorMessage name="userName">
                                                         {(ErrorMessage) => (
@@ -127,7 +127,7 @@ const LoginPage = () => {
 
                                                 </div>
 
-                                                <button className="btn-primary btn-block" >
+                                                <button  type="submit" className="btn-primary btn-block" >
                                                     <i className="fas fa-sign-in-alt"></i> Login
                                                 </button>
 
