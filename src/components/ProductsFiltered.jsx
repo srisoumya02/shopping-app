@@ -13,7 +13,8 @@ import { addToWishlist, removeFromWishlist } from '../Redux/actions/wishlist-act
 
 
 const ProductsFiltered = () => {
-  const [wishlist, setWishlist] = useState({});
+  // const [wishlist, setWishlist] = useState({});
+  const [isIconClicked, setIconClicked] = useState(false);
   const { category, id } = useParams();
   const [filteredProducts, setFilteredProducts] = useState([]);
 
@@ -30,8 +31,10 @@ const ProductsFiltered = () => {
   const handleWishlistClick = (productId, isWishlisted) => {
     if (isWishlisted) {
       dispatch(removeFromWishlist(productId));
+      setIconClicked(isIconClicked);
     } else {
       dispatch(addToWishlist(productId));
+      setIconClicked(!isIconClicked);
     }
   };
 
@@ -54,8 +57,9 @@ const ProductsFiltered = () => {
               <div className="wishlist">
                 <FontAwesomeIcon
                   icon={faHeart}
+                  className={`wishlist-icon ${isIconClicked ? "wishlist-added" : ""}`}
                   onClick={() => handleWishlistClick(product.id)}
-                  style={{ color: wishlist[product.id] ? "pink" : "" }}
+                  style={{ color: isIconClicked ? "pink" : "grey" }}
                 />
               </div>
               <hr />
