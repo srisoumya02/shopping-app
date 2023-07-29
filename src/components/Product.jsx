@@ -1,6 +1,6 @@
 
 import { Link } from "react-router-dom";
-import React, { useContext } from "react";
+import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faStar, faHeart } from "@fortawesome/free-solid-svg-icons";
 import { useDispatch } from "react-redux";
@@ -12,13 +12,15 @@ import { addToWishlist, removeFromWishlist } from '../Redux/actions/wishlist-act
 const Product = (props) => {
 
   const { id, image, title, rating, price } = props.data;
-
+  const [isIconClicked, setIconClicked] = useState(false);
 
   const handleWishlistClick = (productId, isWishlisted) => {
     if (isWishlisted) {
       dispatch(removeFromWishlist(productId));
+      setIconClicked(isIconClicked)
     } else {
       dispatch(addToWishlist(productId));
+      setIconClicked(!isIconClicked)
     }
   };
   const dispatch = useDispatch()
@@ -34,8 +36,9 @@ const Product = (props) => {
         <div className="wishlist">
           <FontAwesomeIcon
             icon={faHeart}
-            // className={`wishlist-icon ${handleWishlistClick(id) ? "wishlist-added" : ""}`}
+            className={`wishlist-icon ${isIconClicked ? "wishlist-added" : ""}`}
             onClick={() => handleWishlistClick(id)}
+            style={{ color: isIconClicked ? "pink" : "grey" }} 
           />
         </div>
         <hr />
