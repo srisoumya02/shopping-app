@@ -8,6 +8,8 @@ import { selectWishlistItemsCount } from '../Redux/selectors/wishlistSelectors';
 import { selectCartNumber, selectCartItems } from '../Redux/selectors/cartSelectors';
 import { fetchProductDataForCartItems } from '../Redux/actions/cart-actions';
 const Navbar = () => {
+
+
     const wishlistItemsCount = useSelector(selectWishlistItemsCount);
     const numberCart = useSelector(selectCartNumber);
     const cartItems = useSelector(selectCartItems);

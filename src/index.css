@@ -65,14 +65,8 @@ code {
   color: black;
 }
 
-.card {
-  display: block;
-  justify-content: center;
-  width: 285px;
-  height: 500px;
-  margin: 20px;
 
-}
+
 
 .img {
   margin: auto;
@@ -90,11 +84,7 @@ code {
   border-radius: 50%;
 }
 
-.wishlist-added {
-  color: red;
-  width: 20px;
-  height: 20px;
-}
+
 
 .filled-star {
   color: gold;

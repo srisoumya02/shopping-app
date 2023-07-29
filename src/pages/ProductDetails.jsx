@@ -8,8 +8,9 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import HeaderCategory from "../components/HeaderCategory";
 import { selectCartItems, selectProductData } from "../Redux/selectors/cartSelectors";
+import { Link } from "react-router-dom";
 
-const ProductOrderSummary = () => {
+const ProductDetails = () => {
   const { id } = useParams();
 
   // const cartItems = useSelector(selectCartItems);
@@ -34,15 +35,16 @@ const ProductOrderSummary = () => {
       <Navbar />
       <HeaderCategory />
       <div className="rowordersummary" style={{ border: "solid lightgrey" }}>
+      
         <img
           src={product.image}
           alt=""
           className="img-fluid"
-          style={{ marginTop: "50px", height: "200px", maxWidth: "200px" }}
+          style={{  height: "200px", maxWidth: "200px" }}
         />
-        <div className="col-sm-7" style={{ borderRight: "solid lightgrey" }}>
+        <div className="col-sm-8" >
           <h3>Brand</h3>
-          <FontAwesomeIcon
+          {/* <FontAwesomeIcon
             icon={faTrash}
             // onClick={() => handleDelete(product.id)}
             style={{
@@ -51,16 +53,28 @@ const ProductOrderSummary = () => {
               top: "10px",
               right: "10px",
             }}
-          />
+          /> */}
           <h5 style={{ fontsize: "22px", marginleft: "10px", color: "grey" }}>
             {product.title}
           </h5>
+          <p>
+            {product.description}
+          </p>
           <h2 style={{ fontsize: "22px", marginleft: "10px", color: "grey" }}>
             <span>&#36;</span>
             {product.price}
           </h2>
-        </div>
-        <div className="col-sm-3">
+          <Link
+          className="btn btn-primary"
+                  style={{ width: "250px", height: "40px" }}
+                  // onClick={addToCartHandler}
+                ><i className="fas fa-shopping-cart"></i>
+                  Add To Cart
+          </Link>
+          </div>
+         
+        
+        {/* <div className="col-sm-3">
           <h5>Order Summary</h5>
           <table style={{ marginTop: "20px" }}>
             <tbody>
@@ -97,11 +111,11 @@ const ProductOrderSummary = () => {
                 </td>
               </tr>
             </tbody>
-          </table>
-        </div>
-      </div>
+          </table>*/}
+        </div> 
+    
     </>
   );
 };
 
-export default ProductOrderSummary;
+export default ProductDetails;

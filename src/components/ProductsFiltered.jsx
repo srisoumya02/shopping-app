@@ -1,4 +1,4 @@
-
+import { useDispatch, useSelector } from "react-redux";
 import React, { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faStar, faHeart } from "@fortawesome/free-solid-svg-icons";
@@ -7,7 +7,6 @@ import axios from "axios";
 import Endpoints from "../apis/Endpoints";
 import Navbar from "./Navbar";
 import HeaderCategory from "./HeaderCategory";
-import { useDispatch } from "react-redux";
 import { addToCart } from '../Redux/actions/cart-actions';
 import { addToWishlist, removeFromWishlist } from '../Redux/actions/wishlist-actions';
 
@@ -15,30 +14,64 @@ import { addToWishlist, removeFromWishlist } from '../Redux/actions/wishlist-act
 const ProductsFiltered = () => {
   // const [wishlist, setWishlist] = useState({});
   const [isIconClicked, setIconClicked] = useState(false);
-  const { category, id } = useParams();
+  const { category } = useParams();
   const [filteredProducts, setFilteredProducts] = useState([]);
+  const wishlist = useSelector((state) => state.wishlist);
+  const dispatch = useDispatch();
+  const [productWishlistStatus, setProductWishlistStatus] = useState({});
 
   useEffect(() => {
-    // Fetch products for the selected category from the API
-    axios
-      .get(Endpoints.CATEGORY_URL + category)
-      .then((response) => {
-        setFilteredProducts(response.data);
-      })
-      .catch((error) => console.log(error));
-  }, [category]);
+    if (category === undefined || category === "All") {
+      // Fetch all products when no category is selected
+      axios
+        .get(Endpoints.PRODUCTS_URL)
+        .then((response) => {
+          const products = response.data;
+          setFilteredProducts(products);
 
-  const handleWishlistClick = (productId, isWishlisted) => {
-    if (isWishlisted) {
+          // Initialize wishlist status for each product based on the global wishlist state
+          const initialWishlistStatus = products.reduce((acc, product) => {
+            acc[product.id] = wishlist.includes(product.id);
+            return acc;
+          }, {});
+
+          setProductWishlistStatus(initialWishlistStatus);
+        })
+        .catch((error) => console.log(error));
+    } else {
+      // Fetch products for the selected category from the API
+      axios
+        .get(Endpoints.CATEGORY_URL + category)
+        .then((response) => {
+          const products = response.data;
+          setFilteredProducts(products);
+
+          // Initialize wishlist status for each product based on the global wishlist state
+          const initialWishlistStatus = products.reduce((acc, product) => {
+            acc[product.id] = wishlist.includes(product.id);
+            return acc;
+          }, {});
+
+          setProductWishlistStatus(initialWishlistStatus);
+        })
+        .catch((error) => console.log(error));
+    }
+  }, [category, wishlist, filteredProducts]);
+
+  const handleWishlistClick = (productId) => {
+    setProductWishlistStatus((prevStatus) => ({
+      ...prevStatus,
+      [productId]: !prevStatus[productId],
+    }));
+
+    if (productWishlistStatus[productId]) {
       dispatch(removeFromWishlist(productId));
-      setIconClicked(isIconClicked);
     } else {
       dispatch(addToWishlist(productId));
-      setIconClicked(!isIconClicked);
     }
   };
 
-  const dispatch = useDispatch()
+
   const addToCartHandler = () => {
     dispatch(addToCart(filteredProducts.id))
   }
@@ -48,19 +81,21 @@ const ProductsFiltered = () => {
     <>
       <Navbar />
       <HeaderCategory />
+
       <div className="row" style={{ margin: "40px" }}>
         {filteredProducts.map((product) => (
-          <div className="col-sm-4" key={product.id} >
-            <ul className="card" style={{ padding: "0px", width: "285px", height: "450px" }}>
+          <div className="col-sm-3" key={product.id} >
+            <ul className="card" style={{ padding: "0px", width: "300px", height: "500px", gap: "10px" }}>
               <img src={product.image} className="img card-top-image" alt="..." style={{ maxWidth: "200px", maxHeight: "200px", marginTop: "20px" }} />
 
               <div className="wishlist">
                 <FontAwesomeIcon
                   icon={faHeart}
-                  className={`wishlist-icon ${isIconClicked ? "wishlist-added" : ""}`}
+                  className={`wishlist-icon ${productWishlistStatus[product.id] ? "wishlist-added" : ""}`}
                   onClick={() => handleWishlistClick(product.id)}
-                  style={{ color: isIconClicked ? "pink" : "grey" }}
+                  style={{ color: productWishlistStatus[product.id] ? "pink" : "grey" }}
                 />
+
               </div>
               <hr />
               <div className="card-body">
@@ -83,9 +118,17 @@ const ProductsFiltered = () => {
                   {product.price}
                   <span style={{ fontSize: "22px", marginLeft: "10px", color: "#888" }}></span>
                 </h2>
-
                 <Link
                   to={'/products/' + product.id}
+                  className="btn btn-primary"
+                  style={{ width: "250px", height: "40px" }}
+                  onClick={addToCartHandler}
+                >
+                  ProductDetails
+                </Link>
+                <p></p>
+                <Link
+
                   className="btn btn-primary"
                   style={{ width: "250px", height: "40px" }}
                   onClick={addToCartHandler}
