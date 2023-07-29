@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { Link } from "react-router-dom";
+import { Link,useNavigate } from "react-router-dom";
 import Endpoints from "../apis/Endpoints";
 import Navbar from "../components/Navbar";
 import HeaderCategory from "../components/HeaderCategory";
@@ -17,10 +17,12 @@ const SignUpPage = () => {
   const initialValues = {
     firstName: '',
     lastName: '',
+    userName:'',
     email: '',
     password: '',
     confirmPassword: ''
   }
+  const navigate = useNavigate();
   const onSubmit = (values) => {
     console.log(values)
     axios.post(Endpoints.REGISTER_URL, values)
@@ -30,6 +32,7 @@ const SignUpPage = () => {
           textMesssage: "Registration Sucessfull",
           alertClass: 'alert alert-success'
         })
+        navigate("/Login");
       },
         (error) => {
           console.log(error);
@@ -45,6 +48,7 @@ const SignUpPage = () => {
   const validationSchema = Yup.object({
     firstName: Yup.string().required('First name is required'),
     lastName: Yup.string().required('Last name is required'),
+    userName:Yup.string().required('username is required'),
     email: Yup.string().required('email is required').email('email must be valid'),
     password: Yup.string().required('password is required').min(6, 'password must be atleast 6 characters'),
     confirmPassword: Yup.string().required('Confirm password is required').oneOf([Yup.ref('password'), null], 'Passwords must match')
@@ -103,6 +107,20 @@ const SignUpPage = () => {
                 </div>
                 <div className="form-group">
                   <input type="text"
+                    name="userName"
+                    placeholder="User Name"
+                    id="userName"
+                    className={Formik.touched.userName && Formik.errors.userName ? "form-control is-invalid" : "form-control"}
+                    value={Formik.values.userName}
+                    onChange={Formik.handleChange}
+                    onBlur={Formik.handleBlur}
+                  />
+                  {Formik.touched.userName && Formik.errors.userName ? (
+                    <small className="text-danger">{Formik.errors.userName}</small>
+                  ) : null}
+                </div>
+                <div className="form-group">
+                  <input type="text"
                     name="email"
                     placeholder="Email Addresses"
                     id="email"
@@ -116,7 +134,7 @@ const SignUpPage = () => {
                   ) : null}
                 </div>
                 <div className="form-group">
-                  <input type="text"
+                  <input type="password"
                     name="password"
                     placeholder="Password"
                     id="password"
@@ -130,7 +148,7 @@ const SignUpPage = () => {
                   ) : null}
                 </div>
                 <div className="form-group">
-                  <input type="text"
+                  <input type="password"
                     name="confirmPassword"
                     placeholder="Password Confirm"
                     id="confirmPassword"
