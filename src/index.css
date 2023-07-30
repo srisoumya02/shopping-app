@@ -67,7 +67,6 @@ code {
 
 
 
-
 .img {
   margin: auto;
   margin-top: inherit;
@@ -84,7 +83,11 @@ code {
   border-radius: 50%;
 }
 
-
+.wishlist-added {
+  color: pink;
+  width: 20px;
+  height: 20px;
+}
 
 .filled-star {
   color: gold;

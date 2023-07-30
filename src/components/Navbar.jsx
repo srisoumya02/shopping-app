@@ -5,18 +5,14 @@ import "../index.css";
 import { Link, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { selectWishlistItemsCount } from '../Redux/selectors/wishlistSelectors';
-import { selectCartNumber, selectCartItems } from '../Redux/selectors/cartSelectors';
-import { fetchProductDataForCartItems } from '../Redux/actions/cart-actions';
+import { selectCartNumber } from '../Redux/selectors/cartSelectors';
+
 const Navbar = () => {
 
 
     const wishlistItemsCount = useSelector(selectWishlistItemsCount);
     const numberCart = useSelector(selectCartNumber);
-    const cartItems = useSelector(selectCartItems);
-    const dispatch = useDispatch();
-    useEffect(() => {
-        dispatch(fetchProductDataForCartItems(cartItems));
-    }, [cartItems, dispatch]);
+    
 
     return (
         <>
@@ -65,7 +61,7 @@ const Navbar = () => {
 
                         </li>
                         <li className="nav-item">
-                            <Link className="nav-link" to="/products/:id">
+                            <Link className="nav-link" to="/cart">
                                 <i className="fas fa-shopping-cart"></i>
                                 {numberCart > 0 ? (
                                     <span className="badge  cart-lookup">

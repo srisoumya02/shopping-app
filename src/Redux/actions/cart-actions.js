@@ -1,4 +1,5 @@
 import axios from "axios";
+import Endpoints from "../../apis/Endpoints";
 import { ActionTypes } from "../constants/action-types"
 
 export const addToCart = (product) => {
@@ -10,24 +11,21 @@ export const addToCart = (product) => {
 }
 
 
-
 export const fetchProductDataForCartItems = (cartItems) => {
   return async (dispatch) => {
     try {
-      // Your asynchronous API call to fetch product data here...
-      // You can use Axios or any other library for the API call.
-
+      // Make API calls to fetch product data for each product ID
       const productDataPromises = cartItems.map((item) =>
-        axios.get(`https://fakestoreapi.com/products/${item.Id}`)
+        axios.get(Endpoints.PRODUCTS_URL + item.id)
       );
 
+      // Wait for all API calls to resolve
       const productDataResponses = await Promise.all(productDataPromises);
 
-      const productsWithData = productDataResponses.map((response, index) => ({
-        ...response.data,
-        quantity: cartItems[index].quantity,
-      }));
+      // Extract the data from the API responses
+      const productsWithData = productDataResponses.map((response) => response.data);
 
+      // Update the Redux store with the fetched product data
       dispatch({
         type: ActionTypes.FETCH_PRODUCT_DATA_SUCCESS,
         payload: productsWithData,

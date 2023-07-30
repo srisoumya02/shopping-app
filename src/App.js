@@ -11,6 +11,7 @@ import LoginPage from "./pages/LoginPage";
 import ProductsFiltered from "./components/ProductsFiltered";
 import Wishlist from "./pages/WishList";
 import ProductDetails from "./pages/ProductDetails";
+import OrderSummary from "./pages/OrderSummary";
 // import { ProductProvider } from "./reducers/ProductContext";
 
 const App = () => {
@@ -21,6 +22,7 @@ const App = () => {
         <Route path="/products/:id" element={<ProductDetails />} />
         <Route path="/products/category/:category" element={<ProductsFiltered />} />
         <Route path="/products/categories" element={<HeaderCategory />} />
+        <Route path="/cart"element={<OrderSummary />} />
         <Route path="/" element={<HomePage />} />
         <Route path="/signup" element={<SignUPPage />} />
         <Route path="/login" element={<LoginPage />} />

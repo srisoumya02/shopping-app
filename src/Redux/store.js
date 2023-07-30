@@ -5,7 +5,7 @@ import { wishListReducer } from "./reducers/WishListReducer";
 
 const rootReducer = combineReducers({
   cart: cartReducer,
-  wishlist: wishListReducer
+  wishlist: wishListReducer,
 });
 
 const store = createStore(rootReducer, applyMiddleware(thunk));

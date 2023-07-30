@@ -12,13 +12,10 @@ import { addToWishlist, removeFromWishlist } from '../Redux/actions/wishlist-act
 
 
 const ProductsFiltered = () => {
-  // const [wishlist, setWishlist] = useState({});
-  const [isIconClicked, setIconClicked] = useState(false);
   const { category } = useParams();
   const [filteredProducts, setFilteredProducts] = useState([]);
   const wishlist = useSelector((state) => state.wishlist);
   const dispatch = useDispatch();
-  const [productWishlistStatus, setProductWishlistStatus] = useState({});
 
   useEffect(() => {
     if (category === undefined || category === "All") {
@@ -26,16 +23,7 @@ const ProductsFiltered = () => {
       axios
         .get(Endpoints.PRODUCTS_URL)
         .then((response) => {
-          const products = response.data;
-          setFilteredProducts(products);
-
-          // Initialize wishlist status for each product based on the global wishlist state
-          const initialWishlistStatus = products.reduce((acc, product) => {
-            acc[product.id] = wishlist.includes(product.id);
-            return acc;
-          }, {});
-
-          setProductWishlistStatus(initialWishlistStatus);
+          setFilteredProducts(response.data);
         })
         .catch((error) => console.log(error));
     } else {
@@ -43,40 +31,23 @@ const ProductsFiltered = () => {
       axios
         .get(Endpoints.CATEGORY_URL + category)
         .then((response) => {
-          const products = response.data;
-          setFilteredProducts(products);
-
-          // Initialize wishlist status for each product based on the global wishlist state
-          const initialWishlistStatus = products.reduce((acc, product) => {
-            acc[product.id] = wishlist.includes(product.id);
-            return acc;
-          }, {});
-
-          setProductWishlistStatus(initialWishlistStatus);
+          setFilteredProducts(response.data);
         })
         .catch((error) => console.log(error));
     }
-  }, [category, wishlist, filteredProducts]);
+  }, [category]);
 
   const handleWishlistClick = (productId) => {
-    setProductWishlistStatus((prevStatus) => ({
-      ...prevStatus,
-      [productId]: !prevStatus[productId],
-    }));
-
-    if (productWishlistStatus[productId]) {
+    if (wishlist[productId]) {
       dispatch(removeFromWishlist(productId));
     } else {
       dispatch(addToWishlist(productId));
     }
   };
 
-
-  const addToCartHandler = () => {
-    dispatch(addToCart(filteredProducts.id))
-  }
-
-
+  const addToCartHandler = (product) => {
+    dispatch(addToCart(product));
+  };
   return (
     <>
       <Navbar />
@@ -89,12 +60,13 @@ const ProductsFiltered = () => {
               <img src={product.image} className="img card-top-image" alt="..." style={{ maxWidth: "200px", maxHeight: "200px", marginTop: "20px" }} />
 
               <div className="wishlist">
-                <FontAwesomeIcon
+              <FontAwesomeIcon
                   icon={faHeart}
-                  className={`wishlist-icon ${productWishlistStatus[product.id] ? "wishlist-added" : ""}`}
+                  className={`wishlist-icon ${wishlist[product.id] ? "wishlist-added" : ""}`}
                   onClick={() => handleWishlistClick(product.id)}
-                  style={{ color: productWishlistStatus[product.id] ? "pink" : "grey" }}
+                  style={{ color: wishlist[product.id] ? "pink" : "grey" }}
                 />
+
 
               </div>
               <hr />
@@ -122,7 +94,7 @@ const ProductsFiltered = () => {
                   to={'/products/' + product.id}
                   className="btn btn-primary"
                   style={{ width: "250px", height: "40px" }}
-                  onClick={addToCartHandler}
+                  
                 >
                   ProductDetails
                 </Link>
@@ -131,7 +103,7 @@ const ProductsFiltered = () => {
 
                   className="btn btn-primary"
                   style={{ width: "250px", height: "40px" }}
-                  onClick={addToCartHandler}
+                  onClick={() => addToCartHandler(product)}
                 ><i className="fas fa-shopping-cart"></i>
                   Add To Cart
                 </Link>
