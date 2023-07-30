@@ -1,18 +1,17 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux/es/hooks/useSelector";
+import { useDispatch } from "react-redux";
 import { useParams } from "react-router";
 import Endpoints from "../apis/Endpoints";
 import Navbar from "../components/Navbar";
 import HeaderCategory from "../components/HeaderCategory";
-import { selectCartItems, selectProductData } from "../Redux/selectors/cartSelectors";
+import { addToCart } from '../Redux/actions/cart-actions';
 import { Link } from "react-router-dom";
 
 const ProductDetails = () => {
   const { id } = useParams();
+  const dispatch = useDispatch();
 
-  // const cartItems = useSelector(selectCartItems);
-  // const [product, setProduct] = useSelector(selectProductData);
   const [product, setProduct] = useState({})
 
   useEffect(() => {
@@ -27,6 +26,10 @@ const ProductDetails = () => {
 
     fetchData();
   }, [id]);
+
+  const addToCartHandler = (product) => {
+    dispatch(addToCart(product));
+  };
 
   return (
     <>
@@ -56,7 +59,7 @@ const ProductDetails = () => {
           <Link
           className="btn btn-primary"
                   style={{ width: "250px", height: "40px" }}
-                  // onClick={addToCartHandler}
+                  onClick={addToCartHandler(product)}
                 ><i className="fas fa-shopping-cart"></i>
                   Add To Cart
           </Link>

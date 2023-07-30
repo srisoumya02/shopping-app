@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { useSelector,useDispatch } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { useParams } from "react-router";
 import Endpoints from "../apis/Endpoints";
 import Navbar from "../components/Navbar";
@@ -10,40 +10,40 @@ import HeaderCategory from "../components/HeaderCategory";
 import { selectCartItems, selectProductData } from "../Redux/selectors/cartSelectors";
 import { fetchProductDataForCartItems } from "../Redux/actions/cart-actions";
 
+
 const OrderSummary = () => {
   const { id } = useParams();
-  console.log(id)
   const cartItems = useSelector(selectCartItems);
-  console.log(cartItems)
+
   const productsWithData = useSelector(selectProductData);
-  console.log(productsWithData)
+
   const dispatch = useDispatch();
   const [product, setProduct] = useState({});
 
   useEffect(() => {
     // Fetch the product data using the 'id' parameter
-    axios.get(Endpoints.PRODUCTS_URL+id)
+    axios.get(Endpoints.PRODUCTS_URL + id)
       .then(response => {
         console.log(response.data)
         setProduct(response.data);
-        fetchProductDataForCartItems(cartItems);
       })
-      
+
       .catch(error => {
         console.error("Error fetching product:", error);
       });
-      
-  }, [cartItems,id]);
+    dispatch(fetchProductDataForCartItems(cartItems));
+  }, [cartItems, id]);
+  console.log(productsWithData)
 
 
- 
   // Calculate the total price of all products in the cart
   const calculateTotalPrice = () => {
-    return cartItems?.reduce((total, item) => total + item.price, 0) ?? 0;
+    const totalprice= cartItems?.reduce((total, item) => total + item.price, 0) ?? 0;
+    return parseFloat(totalprice.toFixed(2))
   };
   // Calculate the tax estimate (e.g., 5% of the total price)
   const calculateTaxEstimate = () => {
-    return calculateTotalPrice() * 0.05;
+    return parseFloat((calculateTotalPrice() * 0.05).toFixed(2));
   };
 
   // Calculate the shipping estimate (e.g., $5 flat rate)
@@ -51,35 +51,51 @@ const OrderSummary = () => {
     return 5;
   };
 
+
+
   return (
     <>
       <Navbar />
       <HeaderCategory />
-      <div className="row ordersummary" style={{ border: "solid lightgrey" }}>
-        <img
-          src={productsWithData.image}
-          alt=""
-          className="img-fluid"
-          style={{ height: "200px", maxWidth: "200px" }}
-        />
-        <div className="col-sm-8">
-          <h3>Brand</h3>
-          <FontAwesomeIcon
-            icon={faTrash}
-            // onClick={() => handleDelete(product.id)}
-            style={{
-              cursor: "pointer",
-              position: "absolute",
-              top: "10px",
-              right: "10px",
-            }}
-          />
-          <h5 style={{ fontSize: "22px", marginLeft: "10px", color: "grey" }}>
-            {productsWithData.title}
-          </h5>
-        </div>
+      <div className="row ordersummary" style={{ border: "solid lightgrey", margin: "40px", height: "300px" }}>
+        {productsWithData.map(item => (
+          <div key={item.id} className="col" style={{ display: "flex", flexDirection: "row", borderRight: "solid lightgrey" }}>
 
-        <div className="col-sm-3">
+            <div className="col-sm-4" style={{ margin: "40px", padding: "0" }}>
+              <img
+                src={item.image}
+                alt=""
+                className="img-fluid"
+                style={{ height: "200px", maxWidth: "200px" }}
+              />
+            </div>
+
+            <div>
+              <h3 style={{ marginTop: "40px" }}>Brand</h3>
+              <FontAwesomeIcon
+                icon={faTrash}
+                // onClick={() => handleDelete(product.id)}
+                style={{
+                  cursor: "pointer",
+                  position: "absolute",
+                  top: "40px",
+                  right: "10px",
+                }}
+              />
+              <h5 style={{ fontSize: "22px", color: "grey" }}>
+                {item.title}
+              </h5>
+              <h2 style={{ fontsize: "22px", marginleft: "10px", color: "grey" }}>
+                <span>&#36;</span>
+                {item.price}
+              </h2>
+            
+            </div>
+
+
+          </div>
+        ))}
+        <div className="col-sm-3" style={{ margin: "40px" }}>
           <h5>Order Summary</h5>
           <table style={{ marginTop: "20px" }}>
             <tbody>
