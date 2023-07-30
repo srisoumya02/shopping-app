@@ -68,7 +68,7 @@ const SignUpPage = () => {
       <div className="container">
         <div className="row">
           <div className="col-md-3"></div>
-          <div className="col-md-6" style={{ display: "flex", justifyContent: "center", border: "solid lightgrey", padding: "20px", margin: "30px" }}>
+          <div className="col-md-5" style={{ display: "flex", justifyContent: "center", border: "solid lightgrey", padding: "20px", margin: "30px" }}>
             <div className="wrapper">
               <div className={requestResponse.alertClass} role="alert">
                 {requestResponse.textMesssage}
@@ -161,8 +161,8 @@ const SignUpPage = () => {
                     <small className="text-danger">{Formik.errors.confirmPassword}</small>
                   ) : null}
                 </div>
-                <button className="btn-primary btn-block" >
-                  <i class="fas fa-user-plus"></i>Sign Up
+                <button type="submit" className="btn-primary btn-block" >
+                  <i className="fas fa-user-plus"></i>Sign Up
                 </button>
 
               </form>
