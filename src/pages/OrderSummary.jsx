@@ -8,7 +8,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import HeaderCategory from "../components/HeaderCategory";
 import { selectCartItems, selectProductData } from "../Redux/selectors/cartSelectors";
-import { fetchProductDataForCartItems } from "../Redux/actions/cart-actions";
+import { fetchProductDataForCartItems,removeFromCart } from "../Redux/actions/cart-actions";
 
 
 const OrderSummary = () => {
@@ -35,7 +35,9 @@ const OrderSummary = () => {
   }, [cartItems, id]);
   console.log(productsWithData)
 
-
+  const handleDelete = (productId) => {
+    dispatch(removeFromCart(productId));
+  };
   // Calculate the total price of all products in the cart
   const calculateTotalPrice = () => {
     const totalprice= cartItems?.reduce((total, item) => total + item.price, 0) ?? 0;
@@ -74,7 +76,7 @@ const OrderSummary = () => {
               <h3 style={{ marginTop: "40px" }}>Brand</h3>
               <FontAwesomeIcon
                 icon={faTrash}
-                // onClick={() => handleDelete(product.id)}
+                onClick={() => handleDelete(item._id)}
                 style={{
                   cursor: "pointer",
                   position: "absolute",

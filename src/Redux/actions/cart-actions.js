@@ -38,3 +38,11 @@ export const fetchProductDataForCartItems = (cartItems) => {
     }
   };
 };
+
+
+export const removeFromCart = (productId) => {
+  return {
+    type: ActionTypes.REMOVE_FROM_CART,
+    payload: productId,
+  };
+};

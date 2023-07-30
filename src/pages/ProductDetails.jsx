@@ -1,17 +1,21 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch,useSelector } from "react-redux";
 import { useParams } from "react-router";
 import Endpoints from "../apis/Endpoints";
 import Navbar from "../components/Navbar";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {  faHeart } from "@fortawesome/free-solid-svg-icons";
 import HeaderCategory from "../components/HeaderCategory";
 import { addToCart } from '../Redux/actions/cart-actions';
 import { Link } from "react-router-dom";
+import { addToWishlist, removeFromWishlist } from '../Redux/actions/wishlist-actions';
+
 
 const ProductDetails = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
-
+  const wishlist = useSelector((state) => state.wishlist);
   const [product, setProduct] = useState({})
 
   useEffect(() => {
@@ -26,6 +30,13 @@ const ProductDetails = () => {
 
     fetchData();
   }, [id]);
+  const handleWishlistClick = (productId) => {
+    if (wishlist[productId]) {
+      dispatch(removeFromWishlist(productId));
+    } else {
+      dispatch(addToWishlist(productId));
+    }
+  };
 
   const addToCartHandler = (product) => {
     dispatch(addToCart(product));
@@ -35,38 +46,49 @@ const ProductDetails = () => {
     <>
       <Navbar />
       <HeaderCategory />
-      <div className="rowordersummary" style={{ border: "solid lightgrey" }}>
-      
+      <div className="row ordersummary" style={{ border: "solid lightgrey",margin:"40px",height:"400px" }}>
+        <div className="col-sm-3">
         <img
           src={product.image}
           alt=""
           className="img-fluid"
-          style={{  height: "200px", maxWidth: "200px" }}
+          style={{ height: "200px", maxWidth: "200px",margin:"30px"}}
         />
-        <div className="col-sm-8" >
-          <h3>Brand</h3>
+        </div>
         
-          <h5 style={{ fontsize: "22px", marginleft: "10px", color: "grey" }}>
+        <div className="col-sm-7" style={{ margin:"20px"}} >
+          <h3>Brand</h3>
+          <div className="wishlist">
+              <FontAwesomeIcon
+                  icon={faHeart}
+                  className={`wishlist-icon ${wishlist[product.id] ? "wishlist-added" : ""}`}
+                  onClick={() => handleWishlistClick(product.id)}
+                  style={{ color: wishlist[product.id] ? "pink" : "grey" ,cursor: "pointer",
+                  position: "absolute",
+                  right: "10px",}}
+                  
+                />
+              </div>
+          <h5 style={{ fontSize: "22px", marginLeft: "10px", color: "grey" }}>
             {product.title}
           </h5>
-          <p>
+          <p style={{ fontSize: "22px", marginLeft: "10px", color: "grey" }}>
             {product.description}
           </p>
-          <h2 style={{ fontsize: "22px", marginleft: "10px", color: "grey" }}>
+          <h2 style={{ fontSize: "22px", marginLeft: "10px", color: "grey" }}>
             <span>&#36;</span>
             {product.price}
           </h2>
           <Link
-          className="btn btn-primary"
-                  style={{ width: "250px", height: "40px" }}
-                  onClick={addToCartHandler(product)}
-                ><i className="fas fa-shopping-cart"></i>
-                  Add To Cart
+            className="btn btn-primary"
+            style={{ width: "250px", height: "40px" }}
+            onClick={() => addToCartHandler(product)}
+          >
+            <i className="fas fa-shopping-cart"></i>
+            Add To Cart
           </Link>
-          </div>
-      
-        </div> 
-    
+        </div>
+      </div>
     </>
   );
 };

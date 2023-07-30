@@ -78,8 +78,8 @@ const LoginPage = () => {
 
             <div className="container" >
                 <div className="row">
-                    <div className="col-md-3"></div>
-                    <div className="col-md-6" style={{ display: "flex", justifyContent: "center", border: "solid lightgrey", padding: "20px", margin: "30px" }}>
+                    <div className="col-sm-3"></div>
+                    <div className="col-sm-5" style={{ display: "flex", justifyContent: "center", border: "solid lightgrey", padding: "20px", margin: "30px" }}>
                         <div className="wrapper">
                             <div className={requestResponse.alertClass} role="alert">
                                 {requestResponse.textMesssage}
@@ -144,7 +144,7 @@ const LoginPage = () => {
                             </p>
                         </div>
                     </div>
-                    <div className="col-md-3"></div>
+                    <div className="col-sm-3"></div>
                 </div>
 
 

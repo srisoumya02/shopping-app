@@ -1,23 +1,37 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart } from "@fortawesome/free-solid-svg-icons";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import "../index.css";
-import { Link, useParams } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 import { selectWishlistItemsCount } from '../Redux/selectors/wishlistSelectors';
 import { selectCartNumber } from '../Redux/selectors/cartSelectors';
 
 const Navbar = () => {
-
-
     const wishlistItemsCount = useSelector(selectWishlistItemsCount);
     const numberCart = useSelector(selectCartNumber);
-    
+    const navigate = useNavigate();
+    const [loginStatus, setLoginStatus] = useState(false);
+
+    useEffect(() => {
+        let token = localStorage.getItem("token");
+        if (!token) {
+            setLoginStatus(false);
+        } else {
+            setLoginStatus(true);
+        }
+    }, [loginStatus]);
+
+    const onLogoutHandler = () => {
+        localStorage.clear();
+        setLoginStatus(false);
+        navigate("/login");
+    }
 
     return (
         <>
             <nav className="navbar navbar-expand-lg ">
-                <Link className="navbar-brand" to="/" style={{ color: 'black', marginleft: '40px' }}>
+                <Link className="navbar-brand" to="/" style={{ color: 'black', marginLeft: '40px' }}>
                     <span style={{ color: '#06b1f0' }}>SHOP</span>LANE
                 </Link>
                 <button
@@ -34,7 +48,7 @@ const Navbar = () => {
 
                 <div className="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul className="navbar-nav ml-auto">
-                        <li className="nav-item dropdown" >
+                        <li className="nav-item">
                             <a
                                 className="nav-link dropdown-toggle"
                                 href="#"
@@ -42,43 +56,44 @@ const Navbar = () => {
                                 data-toggle="dropdown"
                                 aria-expanded="false"
                             >
-                                <i className="fas fa-user"></i> Login/SignUp
+                                <i className="fas fa-user"></i>
                             </a>
-                            <div className="dropdown-menu user-dropdown">
-                                <Link className="dropdown-item user-icon" to="/login">Login</Link>
-                                <Link className="dropdown-item user-icon" to="/signup">Sign Up</Link>
+                            <div className="dropdown-menu dropdown-menu-right">
+                                <form className="form-inline my-2 my-lg-0" style={{ gap: '20px' }}>
+                                    {loginStatus ? (
+                                        <button className="dropdown-item user-icon btn btn-danger" onClick={onLogoutHandler}>Logout</button>
+                                    ) : (
+                                        <>
+                                            <Link className="dropdown-item user-icon" to="/login">Login</Link>
+                                            <Link className="dropdown-item user-icon" to="/signup">Sign Up</Link>
+                                        </>
+                                    )}
+                                </form>
                             </div>
                         </li>
                         <li className="nav-item">
                             <Link to="/wishlist">
-                                <FontAwesomeIcon icon={faHeart} style={{ marginTop: "12px", color: wishlistItemsCount > 0 ? "pink" : "grey" }}
-
-                                />
+                                <FontAwesomeIcon icon={faHeart} style={{ marginTop: "12px", color: wishlistItemsCount > 0 ? "pink" : "grey" }} />
                                 {wishlistItemsCount > 0 && (
                                     <span className="wishlist-added">{wishlistItemsCount}</span>
                                 )}
                             </Link>
-
                         </li>
                         <li className="nav-item">
                             <Link className="nav-link" to="/cart">
                                 <i className="fas fa-shopping-cart"></i>
                                 {numberCart > 0 ? (
-                                    <span className="badge  cart-lookup">
+                                    <span className="badge cart-lookup">
                                         {numberCart}
                                     </span>
                                 ) : null}
                             </Link>
-
                         </li>
                     </ul>
-
                 </div>
             </nav>
-
-
         </>
     );
 }
 
-export default Navbar
+export default Navbar;
