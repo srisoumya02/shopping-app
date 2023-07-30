@@ -65,14 +65,7 @@ code {
   color: black;
 }
 
-.card {
-  display: block;
-  justify-content: center;
-  width: 285px;
-  height: 500px;
-  margin: 20px;
 
-}
 
 .img {
   margin: auto;
@@ -91,7 +84,7 @@ code {
 }
 
 .wishlist-added {
-  color: red;
+  color: pink;
   width: 20px;
   height: 20px;
 }

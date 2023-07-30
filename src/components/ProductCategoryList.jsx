@@ -1,19 +1,20 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Endpoints from "../apis/Endpoints"
-import Product from "../components/Product";
+import Product from "../components/ProductsFiltered";
 import { useParams } from "react-router-dom";
 
 
-const ProductCategoryList = () => {
-    const { category } = useParams()
+const ProductCategoryList=()=>{
+    const {category} =useParams()
     const [products, setProducts] = useState([]);
 
     const getData = () => {
         axios.get(Endpoints.PRODUCTS_URL)
-            .then((response) => {
-                setProducts(response.data);
-            })
+        .then((response) => {
+
+            setProducts(response.data);
+        })
             .catch(error => console.log(error))
     };
     useEffect(() => {
@@ -22,11 +23,11 @@ const ProductCategoryList = () => {
 
     return (
         <div>
-
-            <div className="row" style={{ margin: "40px" }}>
-                {
-                    products.map((product, index) => <Product key={index} data={product} />)
-                }
+       
+            <div className="row" style={{margin:"40px"}}>
+              {
+                products.map((product, index)=> <Product key={index} data={product}/>)
+              }
             </div>
         </div>
     )

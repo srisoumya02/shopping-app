@@ -1,17 +1,14 @@
-import HeaderCategory from "../components/HeaderCategory";
-import Navbar from "../components/Navbar";
-import ProductCategoryList from "../components/ProductCategoryList";
+
+import ProductsFiltered from "../components/ProductsFiltered";
 
 
-const HomePage = (wishlist) => {
-    const wishlistedItemsCount = Object.keys(wishlist).length;
-
+const HomePage = () => {
+    
 
     return (
         <>
-            <Navbar wishlist={wishlist} />
-            <HeaderCategory />
-            <ProductCategoryList />
+          
+            <ProductsFiltered />
 
 
         </>

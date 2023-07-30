@@ -1,4 +1,4 @@
-
+import { useDispatch, useSelector } from "react-redux";
 import React, { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faStar, faHeart } from "@fortawesome/free-solid-svg-icons";
@@ -7,60 +7,67 @@ import axios from "axios";
 import Endpoints from "../apis/Endpoints";
 import Navbar from "./Navbar";
 import HeaderCategory from "./HeaderCategory";
-import { useDispatch } from "react-redux";
 import { addToCart } from '../Redux/actions/cart-actions';
 import { addToWishlist, removeFromWishlist } from '../Redux/actions/wishlist-actions';
 
 
 const ProductsFiltered = () => {
-  // const [wishlist, setWishlist] = useState({});
-  const [isIconClicked, setIconClicked] = useState(false);
-  const { category, id } = useParams();
+  const { category } = useParams();
   const [filteredProducts, setFilteredProducts] = useState([]);
+  const wishlist = useSelector((state) => state.wishlist);
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    // Fetch products for the selected category from the API
-    axios
-      .get(Endpoints.CATEGORY_URL + category)
-      .then((response) => {
-        setFilteredProducts(response.data);
-      })
-      .catch((error) => console.log(error));
+    if (category === undefined || category === "All") {
+      // Fetch all products when no category is selected
+      axios
+        .get(Endpoints.PRODUCTS_URL)
+        .then((response) => {
+          setFilteredProducts(response.data);
+        })
+        .catch((error) => console.log(error));
+    } else {
+      // Fetch products for the selected category from the API
+      axios
+        .get(Endpoints.CATEGORY_URL + category)
+        .then((response) => {
+          setFilteredProducts(response.data);
+        })
+        .catch((error) => console.log(error));
+    }
   }, [category]);
 
-  const handleWishlistClick = (productId, isWishlisted) => {
-    if (isWishlisted) {
+  const handleWishlistClick = (productId) => {
+    if (wishlist[productId]) {
       dispatch(removeFromWishlist(productId));
-      setIconClicked(isIconClicked);
     } else {
       dispatch(addToWishlist(productId));
-      setIconClicked(!isIconClicked);
     }
   };
 
-  const dispatch = useDispatch()
-  const addToCartHandler = () => {
-    dispatch(addToCart(filteredProducts.id))
-  }
-
-
+  const addToCartHandler = (product) => {
+    dispatch(addToCart(product));
+  };
   return (
     <>
       <Navbar />
       <HeaderCategory />
+
       <div className="row" style={{ margin: "40px" }}>
         {filteredProducts.map((product) => (
-          <div className="col-sm-4" key={product.id} >
-            <ul className="card" style={{ padding: "0px", width: "285px", height: "450px" }}>
+          <div className="col-sm-3" key={product.id} >
+            <ul className="card" style={{ padding: "0px", width: "300px", height: "500px", gap: "10px" }}>
               <img src={product.image} className="img card-top-image" alt="..." style={{ maxWidth: "200px", maxHeight: "200px", marginTop: "20px" }} />
 
               <div className="wishlist">
-                <FontAwesomeIcon
+              <FontAwesomeIcon
                   icon={faHeart}
-                  className={`wishlist-icon ${isIconClicked ? "wishlist-added" : ""}`}
+                  className={`wishlist-icon ${wishlist[product.id] ? "wishlist-added" : ""}`}
                   onClick={() => handleWishlistClick(product.id)}
-                  style={{ color: isIconClicked ? "pink" : "grey" }}
+                  style={{ color: wishlist[product.id] ? "pink" : "grey" }}
                 />
+
+
               </div>
               <hr />
               <div className="card-body">
@@ -83,12 +90,20 @@ const ProductsFiltered = () => {
                   {product.price}
                   <span style={{ fontSize: "22px", marginLeft: "10px", color: "#888" }}></span>
                 </h2>
-
                 <Link
                   to={'/products/' + product.id}
                   className="btn btn-primary"
                   style={{ width: "250px", height: "40px" }}
-                  onClick={addToCartHandler}
+                  
+                >
+                  ProductDetails
+                </Link>
+                <p></p>
+                <Link
+
+                  className="btn btn-primary"
+                  style={{ width: "250px", height: "40px" }}
+                  onClick={() => addToCartHandler(product)}
                 ><i className="fas fa-shopping-cart"></i>
                   Add To Cart
                 </Link>
