@@ -54,11 +54,11 @@ const Wishlist = () => {
       <div className="row" style={{ margin: "40px" }}>
         {Object.keys(wishlist).map((productId) => (
           <div className="col-sm-3" key={productId} >
-            <ul className="card" style={{ padding: "0px", width: "300px", height: "500px", gap: "10px" }}>
+            <ul className="card" style={{ padding: "0px", width: "300px", height: "500px", gap: "5px" }}>
               {/* Display product information */}
               {products[productId] ? (
                 <>
-                  <img src={products[productId].image} className="img card-top-image" alt="..." style={{ maxWidth: "200px", maxHeight: "200px", marginTop: "20px" }} />
+                  <img src={products[productId].image} className="img" alt="..." style={{ maxWidth: "200px", maxHeight: "200px", marginTop: "20px",marginBottom:"0px" }} />
                   <div className="wishlist">
                 <FontAwesomeIcon
                   icon={faHeart}
@@ -68,7 +68,8 @@ const Wishlist = () => {
                 />
               </div>
               <hr/>
-                  <h5 className="card-title">
+              <div style={{marginLeft:"30px"}}>
+                <h5 className="card-title">
                     {products[productId].title.length > 20 ? `${products[productId].title.substring(0, 20)}...` : products[productId].title}
                   </h5>
                   <div className="rating">
@@ -87,10 +88,12 @@ const Wishlist = () => {
                   {products[productId].price}
                   <span style={{ fontSize: "22px", marginLeft: "10px", color: "#888" }}></span>
                 </h2>
+              </div>
+                  
                 <Link
                   to={'/products/' + productId}
                   className="btn btn-primary"
-                  style={{ width: "250px", height: "40px" }}
+                  style={{ width: "250px", height: "40px",marginLeft:"20px" }}
                   
                 >
                   ProductDetails
@@ -99,7 +102,7 @@ const Wishlist = () => {
                 <Link
 
                   className="btn btn-primary"
-                  style={{ width: "250px", height: "40px" }}
+                  style={{ width: "250px", height: "40px",marginLeft:"20px" }}
                   onClick={() => addToCartHandler(productId)}
                 ><i className="fas fa-shopping-cart"></i>
                   Add To Cart
