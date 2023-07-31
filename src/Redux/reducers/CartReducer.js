@@ -3,7 +3,7 @@ import { ActionTypes } from "../constants/action-types"
 const initialState = {
   numberCart: 0,
   Carts: [],
-  productData: [],
+  productData: []
 }
 
 export const cartReducer = (state = initialState, { type, payload }) => {
@@ -74,7 +74,7 @@ export const cartReducer = (state = initialState, { type, payload }) => {
 
       return {
         ...state,
-        productData: payload,
+        productData: [...state.Carts],
       };
      
     case ActionTypes.REMOVE_FROM_CART:

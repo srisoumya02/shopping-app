@@ -53,25 +53,26 @@ const OrderSummary = () => {
     return 5;
   };
 
+  
 
 
   return (
     <>
       <Navbar />
       <HeaderCategory />
-      <div className="row ordersummary" style={{ border: "solid lightgrey", margin: "40px", height: "300px" }}>
+      <div className="row ordersummary" style={{margin: "40px",border: "solid lightgrey",display:"flex" }}>
+       <div className="col-sm-8">
         {productsWithData.map(item => (
-          <div key={item.id} className="col" style={{ display: "flex", flexDirection: "row", borderRight: "solid lightgrey" }}>
-
-            <div className="col-sm-4" style={{ margin: "40px", padding: "0" }}>
+          <div key={item.id} className="row" >
+<ul className="card" style={{ display: "flex" ,flexDirection:"row",height:"300px",width:"800px",margin:"20px"}}>
+<div  style={{ margin: "40px", padding: "0" }}>
               <img
                 src={item.image}
                 alt=""
                 className="img-fluid"
-                style={{ height: "200px", maxWidth: "200px" }}
+                style={{ height: "200px", maxWidth: "150px" }}
               />
             </div>
-
             <div>
               <h3 style={{ marginTop: "40px" }}>Brand</h3>
               <FontAwesomeIcon
@@ -91,13 +92,16 @@ const OrderSummary = () => {
                 <span>&#36;</span>
                 {item.price}
               </h2>
-            
+            <input className="quantity-input" type="number" value={item.quantity} />
+      
             </div>
 
-
+</ul>
           </div>
+          
         ))}
-        <div className="col-sm-3" style={{ margin: "40px" }}>
+   </div>
+      <div className="col-sm-3" style={{marginTop:"40px"}} >
           <h5>Order Summary</h5>
           <table style={{ marginTop: "20px" }}>
             <tbody>
@@ -137,7 +141,7 @@ const OrderSummary = () => {
             </tbody>
           </table>
         </div>
-      </div>
+        </div>
     </>
   );
 };
