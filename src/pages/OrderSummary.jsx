@@ -8,7 +8,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import HeaderCategory from "../components/HeaderCategory";
 import { selectCartItems, selectProductData } from "../Redux/selectors/cartSelectors";
-import { fetchProductDataForCartItems,removeFromCart } from "../Redux/actions/cart-actions";
+import { updateCartItemQuantity, fetchProductDataForCartItems,removeFromCart } from "../Redux/actions/cart-actions";
 
 
 const OrderSummary = () => {
@@ -38,11 +38,19 @@ const OrderSummary = () => {
   const handleDelete = (productId) => {
     dispatch(removeFromCart(productId));
   };
+
+  const handleQuantityChange = (productId, newQuantity) => {
+    // Dispatch the updateCartItemQuantity action with the new quantity
+    dispatch(updateCartItemQuantity(productId, newQuantity));
+  };
+
+
   // Calculate the total price of all products in the cart
   const calculateTotalPrice = () => {
-    const totalprice= cartItems?.reduce((total, item) => total + item.price, 0) ?? 0;
-    return parseFloat(totalprice.toFixed(2))
+    const totalPrice = cartItems?.reduce((total, item) => total + item.price * item.quantity, 0);
+    return parseFloat(totalPrice.toFixed(2)) || 0;
   };
+  
   // Calculate the tax estimate (e.g., 5% of the total price)
   const calculateTaxEstimate = () => {
     return parseFloat((calculateTotalPrice() * 0.05).toFixed(2));
@@ -53,30 +61,31 @@ const OrderSummary = () => {
     return 5;
   };
 
+  
 
 
   return (
     <>
       <Navbar />
       <HeaderCategory />
-      <div className="row ordersummary" style={{ border: "solid lightgrey", margin: "40px", height: "300px" }}>
+      <div className="row ordersummary" style={{margin: "40px",border: "solid lightgrey",display:"flex" }}>
+       <div className="col-sm-8">
         {productsWithData.map(item => (
-          <div key={item.id} className="col" style={{ display: "flex", flexDirection: "row", borderRight: "solid lightgrey" }}>
-
-            <div className="col-sm-4" style={{ margin: "40px", padding: "0" }}>
+          <div key={item.id} className="row" >
+<ul className="card" style={{ display: "flex" ,flexDirection:"row",height:"300px",width:"800px",margin:"20px"}}>
+<div  style={{ margin: "40px", padding: "0" }}>
               <img
                 src={item.image}
                 alt=""
                 className="img-fluid"
-                style={{ height: "200px", maxWidth: "200px" }}
+                style={{ height: "200px", maxWidth: "150px" }}
               />
             </div>
-
             <div>
               <h3 style={{ marginTop: "40px" }}>Brand</h3>
               <FontAwesomeIcon
                 icon={faTrash}
-                onClick={() => handleDelete(item._id)}
+                onClick={() => handleDelete(item.id)}
                 style={{
                   cursor: "pointer",
                   position: "absolute",
@@ -91,13 +100,18 @@ const OrderSummary = () => {
                 <span>&#36;</span>
                 {item.price}
               </h2>
-            
+            <input className="quantity-input" type="number" value={item.quantity} 
+            onChange={(e) => handleQuantityChange(item.id, parseInt(e.target.value))}
+            />
+      
             </div>
 
-
+</ul>
           </div>
+          
         ))}
-        <div className="col-sm-3" style={{ margin: "40px" }}>
+   </div>
+      <div className="col-sm-3" style={{borderLeft:"solid lightgrey"}} >
           <h5>Order Summary</h5>
           <table style={{ marginTop: "20px" }}>
             <tbody>
@@ -130,14 +144,14 @@ const OrderSummary = () => {
                 <td>
                   <h6>
                     <span>&#36;</span>
-                    {calculateTotalPrice() + calculateShippingEstimate() + calculateTaxEstimate()}
+                    {(calculateTotalPrice() + calculateShippingEstimate() + calculateTaxEstimate()).toFixed(2)}
                   </h6>
                 </td>
               </tr>
             </tbody>
           </table>
         </div>
-      </div>
+        </div>
     </>
   );
 };

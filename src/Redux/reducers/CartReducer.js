@@ -4,6 +4,7 @@ const initialState = {
   numberCart: 0,
   Carts: [],
   productData: [],
+  cartItems: [],
 }
 
 export const cartReducer = (state = initialState, { type, payload }) => {
@@ -35,18 +36,17 @@ export const cartReducer = (state = initialState, { type, payload }) => {
             
 
             const existingItem = state.Carts.find(item =>{
-              console.log(item.id);
-              console.log(payload.id);
+              
               return (item.id === payload.id)
             } );
         
             if (existingItem) {
               // If the product exists, update its quantity using map
-              console.log(state)
+            
               return {
                 ...state,
                 Carts: state.Carts.map(item =>
-                  item._id === payload._id ? { ...item, quantity: item.quantity + 1 } : item
+                  item.id === payload.id ? { ...item, quantity: item.quantity + 1 } : item
                 ),
                 numberCart: state.numberCart + 1,
               };
@@ -74,14 +74,44 @@ export const cartReducer = (state = initialState, { type, payload }) => {
 
       return {
         ...state,
-        productData: payload,
+        productData: [...state.Carts],
       };
      
     case ActionTypes.REMOVE_FROM_CART:
+    const itemToRemove=state.Carts.find((item)=>item.id === payload);
+    if(!itemToRemove){
+      return state;
+    }
+    if(itemToRemove.quantity > '1'){
+      const updatedCarts=state.Carts.map((item)=>
+      item.id === payload ?{...item,quantity:item.quantity - 1}:item)
+      
+      return{
+        ...state,
+      Carts:updatedCarts,
+    numberCart:state.numberCart - 1,
+        };
+    }else{
+      const updatedCarts=state.Carts.filter((item)=>item.id !== payload);
       return {
         ...state,
-        Carts: state.Carts.filter((item) => item._id !== payload),
+        Carts: updatedCarts,
         numberCart: state.numberCart - 1,
+      };
+    }
+  
+    case ActionTypes.UPDATE_CART_ITEM_QUANTITY:
+      const { productId, newQuantity } = payload;
+      const updatedCartItems = state.Carts.map((item) =>
+        item.id === productId ? { ...item, quantity: newQuantity } : item
+      );
+
+      const updatedNumberCart = updatedCartItems.reduce((total, item) => total + item.quantity, 0);
+
+      return {
+        ...state,
+        Carts: updatedCartItems,
+        numberCart: updatedNumberCart,
       };
     default:
       return state;

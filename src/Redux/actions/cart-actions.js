@@ -46,3 +46,15 @@ export const removeFromCart = (productId) => {
     payload: productId,
   };
 };
+
+// cart-actions.js
+
+export const updateCartItemQuantity = (productId, newQuantity) => {
+  return {
+    type: ActionTypes.UPDATE_CART_ITEM_QUANTITY,
+    payload: {
+      productId,
+      newQuantity,
+    },
+  };
+};
