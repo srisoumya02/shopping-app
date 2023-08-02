@@ -12,7 +12,7 @@ import HeaderCategory from '../components/HeaderCategory';
 
 const Wishlist = () => {
   const wishlist = useSelector((state) => state.wishlist);
-  
+
   const dispatch = useDispatch();
   const [products, setProducts] = useState({});
 
@@ -28,7 +28,7 @@ const Wishlist = () => {
     const productIds = Object.keys(wishlist);
 
     if (productIds.length > 0) {
-      Promise.all(productIds.map(productId => axios.get(Endpoints.PRODUCTS_URL+productId)))
+      Promise.all(productIds.map(productId => axios.get(Endpoints.PRODUCTS_URL + productId)))
         .then((responses) => {
           const fetchedProducts = responses.reduce((acc, response) => {
             const product = response.data;
@@ -43,14 +43,17 @@ const Wishlist = () => {
     }
   }, [wishlist]);
   const addToCartHandler = (productId) => {
-    dispatch(addToCart(productId));
+
+    const product = products[productId];
+
+    dispatch(addToCart(product));
   };
 
 
   return (
     <div>
       <Navbar />
-      <HeaderCategory />            
+      <HeaderCategory />
       <div className="row" style={{ margin: "40px" }}>
         {Object.keys(wishlist).map((productId) => (
           <div className="col-sm-3" key={productId} >
@@ -58,62 +61,63 @@ const Wishlist = () => {
               {/* Display product information */}
               {products[productId] ? (
                 <>
-                  <img src={products[productId].image} className="img" alt="..." style={{ maxWidth: "200px", maxHeight: "200px", marginTop: "20px",marginBottom:"0px" }} />
+                  <img src={products[productId].image} className="img" alt="..." style={{ maxWidth: "200px", maxHeight: "200px", marginTop: "20px", marginBottom: "0px" }} />
                   <div className="wishlist">
-                <FontAwesomeIcon
-                  icon={faHeart}
-                  className={`wishlist-icon ${wishlist[productId] ? "wishlist-added" : ""}`}
-                  onClick={() => handleWishlistClick(productId)}
-                  style={{ color: wishlist[productId] ? "pink" : "grey" }}
-                />
-              </div>
-              <hr/>
-              <div style={{marginLeft:"30px"}}>
-                <h5 className="card-title">
-                    {products[productId].title.length > 20 ? `${products[productId].title.substring(0, 20)}...` : products[productId].title}
-                  </h5>
-                  <div className="rating">
-                  {Array.from({ length: 5 }, (_, i) => (
                     <FontAwesomeIcon
-                      key={i}
-                      icon={faStar}
-                      className={i < products[productId].rating.rate ? "filled-star" : "empty-star"}
+                      icon={faHeart}
+                      className={`wishlist-icon ${wishlist[productId] ? "wishlist-added" : ""}`}
+                      onClick={() => handleWishlistClick(productId)}
+                      style={{ color: wishlist[productId] ? "pink" : "grey" }}
                     />
-                  ))}
-                  {products[productId].rating.rate}
-                  <span>({products[productId].rating.count})</span>
-                </div>
-                <h2>
-                  <span>&#36;</span>
-                  {products[productId].price}
-                  <span style={{ fontSize: "22px", marginLeft: "10px", color: "#888" }}></span>
-                </h2>
-              </div>
-                  
-                <Link
-                  to={'/products/' + productId}
-                  className="btn btn-primary"
-                  style={{ width: "250px", height: "40px",marginLeft:"20px" }}
-                  
-                >
-                  ProductDetails
-                </Link>
-                <p></p>
-                <Link
+                  </div>
+                  <hr />
+                  <div style={{ marginLeft: "30px" }}>
+                    <h5 className="card-title">
+                      {products[productId].title.length > 20 ? `${products[productId].title.substring(0, 20)}...` : products[productId].title}
+                    </h5>
+                    <div className="rating">
+                      {Array.from({ length: 5 }, (_, i) => (
+                        <FontAwesomeIcon
+                          key={i}
+                          icon={faStar}
+                          className={i < products[productId].rating.rate ? "filled-star" : "empty-star"}
+                        />
+                      ))}
+                      {products[productId].rating.rate}
+                      <span>({products[productId].rating.count})</span>
+                    </div>
+                    <h2>
+                      <span>&#36;</span>
+                      {products[productId].price}
+                      <span style={{ fontSize: "22px", marginLeft: "10px", color: "#888" }}></span>
+                    </h2>
+                  </div>
 
-                  className="btn btn-primary"
-                  style={{ width: "250px", height: "40px",marginLeft:"20px" }}
-                  onClick={() => addToCartHandler(productId)}
-                ><i className="fas fa-shopping-cart"></i>
-                  Add To Cart
-                </Link>
+                  <Link
+                    to={'/products/' + productId}
+                    className="btn btn-primary"
+                    style={{ width: "250px", height: "40px", marginLeft: "20px" }}
+
+                  >
+                    ProductDetails
+                  </Link>
+                  <p></p>
+                  <Link
+                    className="btn btn-primary"
+                    style={{ width: "250px", height: "40px", marginLeft: "20px" }}
+                    onClick={() => addToCartHandler(productId)}
+                  >
+                    <i className="fas fa-shopping-cart"></i>
+                    Add To Cart
+                  </Link>
+
                 </>
               ) : (
                 // Render a placeholder or loading state if product information is not available yet
                 <div>Loading...</div>
               )}
-            
-              
+
+
             </ul>
           </div>
         ))}
