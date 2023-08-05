@@ -3,15 +3,19 @@ import { faHeart } from "@fortawesome/free-solid-svg-icons";
 import React, { useEffect, useState } from "react";
 import "../index.css";
 import { Link, useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useSelector,useDispatch } from "react-redux";
 import { selectWishlistItemsCount } from '../Redux/selectors/wishlistSelectors';
 import { selectCartNumber } from '../Redux/selectors/cartSelectors';
+import {resetCart} from '../Redux/actions/cart-actions';
+
 
 const Navbar = () => {
     const wishlistItemsCount = useSelector(selectWishlistItemsCount);
     const numberCart = useSelector(selectCartNumber);
     const navigate = useNavigate();
     const [loginStatus, setLoginStatus] = useState(false);
+    const dispatch = useDispatch();
+
 
     useEffect(() => {
         let token = localStorage.getItem("token");
@@ -25,6 +29,7 @@ const Navbar = () => {
     const onLogoutHandler = () => {
         localStorage.clear();
         setLoginStatus(false);
+        dispatch(resetCart());
         navigate("/login");
     }
 
@@ -72,12 +77,14 @@ const Navbar = () => {
                             </div>
                         </li>
                         <li className="nav-item">
-                            <Link to="/wishlist">
-                                <FontAwesomeIcon icon={faHeart} style={{ marginTop: "12px", color: wishlistItemsCount > 0 ? "pink" : "grey" }} />
-                                {wishlistItemsCount > 0 && (
-                                    <span className="wishlist-added">{wishlistItemsCount}</span>
-                                )}
-                            </Link>
+                        { loginStatus ? (
+    <Link to="/wishlist">
+      <FontAwesomeIcon icon={faHeart} style={{ marginTop: "12px", color: wishlistItemsCount > 0 ? "pink" : "grey" }} />
+      {wishlistItemsCount > 0 && (
+        <span className="wishlist-added">{wishlistItemsCount}</span>
+      )}
+    </Link>
+  ) : null}
                         </li>
                         <li className="nav-item">
                             <Link className="nav-link" to="/cart">

@@ -47,7 +47,6 @@ export const removeFromCart = (productId) => {
   };
 };
 
-// cart-actions.js
 
 export const updateCartItemQuantity = (productId, newQuantity) => {
   return {
@@ -56,5 +55,13 @@ export const updateCartItemQuantity = (productId, newQuantity) => {
       productId,
       newQuantity,
     },
+  };
+};
+
+
+
+export const resetCart = () => {
+  return {
+    type: ActionTypes.RESET_CART,
   };
 };
