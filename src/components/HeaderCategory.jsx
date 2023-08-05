@@ -16,6 +16,9 @@ const HeaderCategory = () => {
       .catch((error) => console.log(error));
   }, []);
 
+  function capitalizeFirstLetter(str) {
+    return str.charAt(0).toUpperCase() + str.slice(1);
+  }
 
 
   return (
@@ -34,14 +37,16 @@ const HeaderCategory = () => {
             style={{ border: "none", cursor: "pointer" }}
           >
             <Link to={`/products/category/${category}`}>
-              {category}
+            {capitalizeFirstLetter(category)}
             </Link>
 
           </li>
         ))}
+        
+    
       </ul>
-      {/* 
-      <ProductList products={filteredProducts} /> */}
+     
+    
     </div>
   );
 };
