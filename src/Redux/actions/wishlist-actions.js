@@ -12,3 +12,9 @@ export const removeFromWishlist = (productId) => ({
   type: ActionTypes.REMOVE_FROM_WISHLIST,
   payload: productId,
 });
+
+export const resetWishlist = () => {
+  return {
+    type: ActionTypes.RESET_WISHLIST,
+  };
+};

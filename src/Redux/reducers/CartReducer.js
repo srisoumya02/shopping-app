@@ -113,6 +113,13 @@ export const cartReducer = (state = initialState, { type, payload }) => {
         Carts: updatedCartItems,
         numberCart: updatedNumberCart,
       };
+
+      case ActionTypes.RESET_CART:
+      return {
+        ...state,
+        numberCart: 0,
+        Carts:[] 
+      };
     default:
       return state;
   }

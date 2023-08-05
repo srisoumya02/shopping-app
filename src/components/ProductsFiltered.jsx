@@ -17,6 +17,19 @@ const ProductsFiltered = () => {
   const wishlist = useSelector((state) => state.wishlist);
   const dispatch = useDispatch();
 
+  const [loginStatus, setLoginStatus] = useState(false);
+
+
+
+  useEffect(() => {
+      let token = localStorage.getItem("token");
+      if (!token) {
+          setLoginStatus(false);
+      } else {
+          setLoginStatus(true);
+      }
+  }, [loginStatus]);
+
   useEffect(() => {
     if (category === undefined || category === "All") {
       // Fetch all products when no category is selected
@@ -60,12 +73,13 @@ const ProductsFiltered = () => {
               <img src={product.image} className="img card-top-image" alt="..." style={{ maxWidth: "200px", maxHeight: "200px", marginTop: "20px" }} />
 
               <div className="wishlist">
+              { loginStatus ? (
               <FontAwesomeIcon
                   icon={faHeart}
                   className={`wishlist-icon ${wishlist[product.id] ? "wishlist-added" : ""}`}
                   onClick={() => handleWishlistClick(product.id)}
                   style={{ color: wishlist[product.id] ? "pink" : "grey" }}
-                />
+                />):null}
 
 
               </div>
