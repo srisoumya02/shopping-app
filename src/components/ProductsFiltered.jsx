@@ -69,8 +69,17 @@ const ProductsFiltered = () => {
       <div className="row" style={{ margin: "40px" }}>
         {filteredProducts.map((product) => (
           <div className="col-sm-3" key={product.id} >
-            <ul className="card" style={{ padding: "0px", width: "300px", height: "500px", gap: "10px" }}>
-              <img src={product.image} className="img card-top-image" alt="..." style={{ maxWidth: "200px", maxHeight: "200px", marginTop: "20px" }} />
+            <ul className="card" style={{ padding: "0px", width: "300px", height: "600px", gap: "10px" }}>
+            <div style={{ maxWidth: "200px", maxHeight: "250px", margin: "40px" }}>
+  <Link to={`/products/${product.id}`}>
+    <img
+      src={product.image}
+      className="img card-top-image"
+      alt="..."
+      style={{  maxWidth: "200px", maxHeight: "250px" }}
+    />
+  </Link>
+</div>
 
               <div className="wishlist">
               { loginStatus ? (
@@ -104,7 +113,7 @@ const ProductsFiltered = () => {
                   {product.price}
                   <span style={{ fontSize: "22px", marginLeft: "10px", color: "#888" }}></span>
                 </h2>
-                <Link
+                {/* <Link
                   to={'/products/' + product.id}
                   className="btn btn-primary"
                   style={{ width: "250px", height: "40px" }}
@@ -112,7 +121,7 @@ const ProductsFiltered = () => {
                 >
                   ProductDetails
                 </Link>
-                <p></p>
+                <p></p> */}
                 <Link
 
                   className="btn btn-primary"
